@@ -20,8 +20,8 @@ import net.minecraft.entity.LivingEntity;
 public final class SkinArmorRenderer<T extends LivingEntity> {
     private final BipedEntityModel<T> headModel = new BipedEntityModel<>(
             BipedEntityModel.getModelData(new Dilation(0.6F), 0.0F).getRoot().createPart(64, 64));
-    private final PlayerEntityModel<T> wideChestModel = createChestModel(false);
-    private final PlayerEntityModel<T> slimChestModel = createChestModel(true);
+    private final PlayerEntityModel<T> wideModel = createPlayerModel(false);
+    private final PlayerEntityModel<T> slimModel = createPlayerModel(true);
 
     public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light,
                        BipedEntityModel<T> contextModel, EquipmentSlot slot, SkinTextures skin,
@@ -36,7 +36,7 @@ public final class SkinArmorRenderer<T extends LivingEntity> {
             model.hat.copyTransform(model.head);
         } else if (slot == EquipmentSlot.CHEST) {
             PlayerEntityModel<T> chestModel = skin.model() == SkinTextures.Model.SLIM
-                    ? slimChestModel : wideChestModel;
+                    ? slimModel : wideModel;
             contextModel.copyBipedStateTo(chestModel);
             chestModel.setVisible(false);
             chestModel.body.visible = true;
@@ -49,6 +49,16 @@ public final class SkinArmorRenderer<T extends LivingEntity> {
             chestModel.leftSleeve.copyTransform(chestModel.leftArm);
             chestModel.rightSleeve.copyTransform(chestModel.rightArm);
             model = chestModel;
+        } else if (slot == EquipmentSlot.LEGS) {
+            contextModel.copyBipedStateTo(wideModel);
+            wideModel.setVisible(false);
+            wideModel.leftLeg.visible = true;
+            wideModel.rightLeg.visible = true;
+            wideModel.leftPants.visible = true;
+            wideModel.rightPants.visible = true;
+            wideModel.leftPants.copyTransform(wideModel.leftLeg);
+            wideModel.rightPants.copyTransform(wideModel.rightLeg);
+            model = wideModel;
         } else {
             return;
         }
@@ -58,7 +68,7 @@ public final class SkinArmorRenderer<T extends LivingEntity> {
         model.render(matrices, vertices, light, OverlayTexture.DEFAULT_UV);
     }
 
-    private static <T extends LivingEntity> PlayerEntityModel<T> createChestModel(boolean slim) {
+    private static <T extends LivingEntity> PlayerEntityModel<T> createPlayerModel(boolean slim) {
         ModelData data = PlayerEntityModel.getTexturedModelData(new Dilation(0.6F), slim);
         if (slim) {
             // Slim skin arms must also cover a wearer with wide arms and sleeves.

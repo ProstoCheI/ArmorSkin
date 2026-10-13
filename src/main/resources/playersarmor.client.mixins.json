@@ -3,7 +3,8 @@
   "package": "dev.playersarmor.mixin",
   "compatibilityLevel": "JAVA_21",
   "client": [
-    "ArmorFeatureRendererMixin"
+    "ArmorFeatureRendererMixin",
+    "ItemRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

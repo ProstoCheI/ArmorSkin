@@ -17,6 +17,8 @@ public final class SkinArmorItemRenderer {
             BipedEntityModel.getModelData(Dilation.NONE, 0.0F).getRoot().createPart(64, 64));
     private final PlayerEntityModel<LivingEntity> chestModel = new PlayerEntityModel<>(
             PlayerEntityModel.getTexturedModelData(Dilation.NONE, false).getRoot().createPart(64, 64), false);
+    private final PlayerEntityModel<LivingEntity> legsModel = new PlayerEntityModel<>(
+            PlayerEntityModel.getTexturedModelData(Dilation.NONE, false).getRoot().createPart(64, 64), false);
 
     public SkinArmorItemRenderer() {
         headModel.child = false;
@@ -32,6 +34,13 @@ public final class SkinArmorItemRenderer {
         chestModel.jacket.visible = true;
         chestModel.leftSleeve.visible = true;
         chestModel.rightSleeve.visible = true;
+
+        legsModel.child = false;
+        legsModel.setVisible(false);
+        legsModel.leftLeg.visible = true;
+        legsModel.rightLeg.visible = true;
+        legsModel.leftPants.visible = true;
+        legsModel.rightPants.visible = true;
     }
 
     public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers,
@@ -46,6 +55,11 @@ public final class SkinArmorItemRenderer {
             matrices.scale(0.75F, -0.75F, -0.75F);
             matrices.translate(0.0F, -0.375F, 0.0F);
             model = chestModel;
+        } else if (slot == EquipmentSlot.LEGS) {
+            matrices.translate(0.0F, -0.25F, 0.0F);
+            matrices.scale(0.9F, -0.9F, -0.9F);
+            matrices.translate(0.0F, -1.125F, 0.0F);
+            model = legsModel;
         } else {
             return;
         }

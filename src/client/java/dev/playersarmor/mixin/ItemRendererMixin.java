@@ -38,7 +38,8 @@ public abstract class ItemRendererMixin {
                                              int light, int overlay, BakedModel model, CallbackInfo ci) {
         ArmorAppearance appearance = ArmorAppearance.fromStack(stack);
         if (appearance == null
-                || (appearance.slot() != EquipmentSlot.HEAD && appearance.slot() != EquipmentSlot.CHEST)) {
+                || (appearance.slot() != EquipmentSlot.HEAD && appearance.slot() != EquipmentSlot.CHEST
+                && appearance.slot() != EquipmentSlot.LEGS)) {
             return;
         }
 

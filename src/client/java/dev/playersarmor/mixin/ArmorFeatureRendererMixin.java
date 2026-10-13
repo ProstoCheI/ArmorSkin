@@ -2,16 +2,12 @@ package dev.playersarmor.mixin;
 
 import dev.playersarmor.ArmorAppearance;
 import dev.playersarmor.PlayerSkinCache;
-import net.minecraft.client.model.Dilation;
-import net.minecraft.client.render.OverlayTexture;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
+import dev.playersarmor.SkinArmorRenderer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.ArmorFeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
-import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.util.SkinTextures;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EquipmentSlot;
@@ -28,20 +24,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ArmorFeatureRenderer.class)
 public abstract class ArmorFeatureRendererMixin<T extends LivingEntity>
         extends FeatureRenderer<T, BipedEntityModel<T>> {
-    // Keep the costume outside the wearer's head and outer skin layer.
     @Unique
-    private final BipedEntityModel<T> playersarmor$headModel = new BipedEntityModel<>(
-            BipedEntityModel.getModelData(new Dilation(0.6F), 0.0F).getRoot().createPart(64, 64));
+    private final SkinArmorRenderer<T> playersarmor$renderer = new SkinArmorRenderer<>();
 
     protected ArmorFeatureRendererMixin(FeatureRendererContext<T, BipedEntityModel<T>> context) {
         super(context);
     }
 
     @Inject(method = "renderArmor", at = @At("HEAD"), cancellable = true)
-    private void playersarmor$renderHelmet(MatrixStack matrices, VertexConsumerProvider vertexConsumers,
-                                          T entity, EquipmentSlot slot, int light,
-                                          BipedEntityModel<T> armorModel, CallbackInfo ci) {
-        if (slot != EquipmentSlot.HEAD
+    private void playersarmor$renderArmor(MatrixStack matrices, VertexConsumerProvider vertexConsumers,
+                                         T entity, EquipmentSlot slot, int light,
+                                         BipedEntityModel<T> armorModel, CallbackInfo ci) {
+        if ((slot != EquipmentSlot.HEAD && slot != EquipmentSlot.CHEST)
                 || !(entity instanceof PlayerEntity || entity instanceof ArmorStandEntity)) {
             return;
         }
@@ -57,15 +51,8 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity>
             return;
         }
 
-        getContextModel().copyBipedStateTo(playersarmor$headModel);
-        playersarmor$headModel.setVisible(false);
-        playersarmor$headModel.head.visible = true;
-        playersarmor$headModel.hat.visible = true;
-        playersarmor$headModel.hat.copyTransform(playersarmor$headModel.head);
-
-        VertexConsumer vertices = ItemRenderer.getArmorGlintConsumer(vertexConsumers,
-                RenderLayer.getArmorCutoutNoCull(skin.texture()), stack.hasGlint());
-        playersarmor$headModel.render(matrices, vertices, light, OverlayTexture.DEFAULT_UV);
+        playersarmor$renderer.render(matrices, vertexConsumers, light, getContextModel(),
+                slot, skin, stack.hasGlint());
         ci.cancel();
     }
 }

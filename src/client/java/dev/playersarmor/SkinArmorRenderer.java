@@ -22,6 +22,7 @@ public final class SkinArmorRenderer<T extends LivingEntity> {
             BipedEntityModel.getModelData(new Dilation(0.6F), 0.0F).getRoot().createPart(64, 64));
     private final PlayerEntityModel<T> wideModel = createPlayerModel(false);
     private final PlayerEntityModel<T> slimModel = createPlayerModel(true);
+    private final SkinBootsModel<T> bootsModel = new SkinBootsModel<>();
 
     public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light,
                        BipedEntityModel<T> contextModel, EquipmentSlot slot, SkinTextures skin,
@@ -59,6 +60,12 @@ public final class SkinArmorRenderer<T extends LivingEntity> {
             wideModel.leftPants.copyTransform(wideModel.leftLeg);
             wideModel.rightPants.copyTransform(wideModel.rightLeg);
             model = wideModel;
+        } else if (slot == EquipmentSlot.FEET) {
+            contextModel.copyBipedStateTo(bootsModel);
+            bootsModel.setVisible(false);
+            bootsModel.leftLeg.visible = true;
+            bootsModel.rightLeg.visible = true;
+            model = bootsModel;
         } else {
             return;
         }

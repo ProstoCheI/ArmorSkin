@@ -35,8 +35,7 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity>
     private void playersarmor$renderArmor(MatrixStack matrices, VertexConsumerProvider vertexConsumers,
                                          T entity, EquipmentSlot slot, int light,
                                          BipedEntityModel<T> armorModel, CallbackInfo ci) {
-        if ((slot != EquipmentSlot.HEAD && slot != EquipmentSlot.CHEST && slot != EquipmentSlot.LEGS)
-                || !(entity instanceof PlayerEntity || entity instanceof ArmorStandEntity)) {
+        if (!(entity instanceof PlayerEntity || entity instanceof ArmorStandEntity)) {
             return;
         }
 

@@ -2,7 +2,7 @@ package dev.playersarmor.mixin;
 
 import dev.playersarmor.ArmorAppearance;
 import dev.playersarmor.PlayerSkinCache;
-import dev.playersarmor.SkinHelmetItemRenderer;
+import dev.playersarmor.SkinArmorItemRenderer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.item.ItemModels;
 import net.minecraft.client.render.item.ItemRenderer;
@@ -28,16 +28,17 @@ public abstract class ItemRendererMixin {
     private ItemModels models;
 
     @Unique
-    private final SkinHelmetItemRenderer playersarmor$helmetRenderer = new SkinHelmetItemRenderer();
+    private final SkinArmorItemRenderer playersarmor$itemRenderer = new SkinArmorItemRenderer();
 
     @Inject(method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/render/model/json/ModelTransformationMode;ZLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IILnet/minecraft/client/render/model/BakedModel;)V",
             at = @At("HEAD"), cancellable = true)
-    private void playersarmor$renderHelmetItem(ItemStack stack, ModelTransformationMode mode,
-                                              boolean leftHanded, MatrixStack matrices,
-                                              VertexConsumerProvider vertexConsumers,
-                                              int light, int overlay, BakedModel model, CallbackInfo ci) {
+    private void playersarmor$renderArmorItem(ItemStack stack, ModelTransformationMode mode,
+                                             boolean leftHanded, MatrixStack matrices,
+                                             VertexConsumerProvider vertexConsumers,
+                                             int light, int overlay, BakedModel model, CallbackInfo ci) {
         ArmorAppearance appearance = ArmorAppearance.fromStack(stack);
-        if (appearance == null || appearance.slot() != EquipmentSlot.HEAD) {
+        if (appearance == null
+                || (appearance.slot() != EquipmentSlot.HEAD && appearance.slot() != EquipmentSlot.CHEST)) {
             return;
         }
 
@@ -50,7 +51,8 @@ public abstract class ItemRendererMixin {
         try {
             models.getModel(Items.PLAYER_HEAD).getTransformation().getTransformation(mode)
                     .apply(leftHanded, matrices);
-            playersarmor$helmetRenderer.render(matrices, vertexConsumers, light, overlay, skin, stack.hasGlint());
+            playersarmor$itemRenderer.render(matrices, vertexConsumers, light, overlay,
+                    appearance.slot(), skin, stack.hasGlint());
         } finally {
             matrices.pop();
         }

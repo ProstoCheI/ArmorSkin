@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "dev.playersarmor.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "ArmorFeatureRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

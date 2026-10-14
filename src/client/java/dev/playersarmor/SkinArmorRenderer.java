@@ -16,6 +16,8 @@ import net.minecraft.entity.LivingEntity;
 public final class SkinArmorRenderer<T extends LivingEntity> {
     private final BipedEntityModel<T> headModel = new BipedEntityModel<>(
             BipedEntityModel.getModelData(new Dilation(0.6F), 0.0F).getRoot().createPart(64, 64));
+    private final BipedEntityModel<T> replacementHeadModel = new BipedEntityModel<>(
+            BipedEntityModel.getModelData(Dilation.NONE, 0.0F).getRoot().createPart(64, 64));
     private final PlayerEntityModel<T> wideModel = new PlayerEntityModel<>(
             PlayerEntityModel.getTexturedModelData(new Dilation(0.6F), false)
                     .getRoot().createPart(64, 64), false);
@@ -23,10 +25,10 @@ public final class SkinArmorRenderer<T extends LivingEntity> {
 
     public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light,
                        BipedEntityModel<T> contextModel, EquipmentSlot slot, SkinTextures skin,
-                       boolean glint) {
+                       boolean glint, boolean replacement) {
         BipedEntityModel<T> model;
         if (slot == EquipmentSlot.HEAD) {
-            model = headModel;
+            model = replacement ? replacementHeadModel : headModel;
             contextModel.copyBipedStateTo(model);
             model.setVisible(false);
             model.head.visible = true;

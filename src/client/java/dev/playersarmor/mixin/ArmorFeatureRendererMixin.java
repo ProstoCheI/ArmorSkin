@@ -1,6 +1,7 @@
 package dev.playersarmor.mixin;
 
 import dev.playersarmor.ArmorAppearance;
+import dev.playersarmor.ArmorNameParser;
 import dev.playersarmor.PlayerSkinCache;
 import dev.playersarmor.SkinArmorRenderer;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -51,7 +52,7 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity>
         }
 
         playersarmor$renderer.render(matrices, vertexConsumers, light, getContextModel(),
-                slot, skin, stack.hasGlint());
+                slot, skin, stack.hasGlint(), ArmorNameParser.hasFlag(appearance.flags(), 'r'));
         ci.cancel();
     }
 }

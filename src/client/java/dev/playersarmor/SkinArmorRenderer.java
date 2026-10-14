@@ -52,15 +52,16 @@ public final class SkinArmorRenderer<T extends LivingEntity> {
             chestModel.rightSleeve.copyTransform(chestModel.rightArm);
             model = chestModel;
         } else if (slot == EquipmentSlot.LEGS) {
-            contextModel.copyBipedStateTo(wideModel);
-            wideModel.setVisible(false);
-            wideModel.leftLeg.visible = true;
-            wideModel.rightLeg.visible = true;
-            wideModel.leftPants.visible = true;
-            wideModel.rightPants.visible = true;
-            wideModel.leftPants.copyTransform(wideModel.leftLeg);
-            wideModel.rightPants.copyTransform(wideModel.rightLeg);
-            model = wideModel;
+            PlayerEntityModel<T> legsModel = replacement ? replacementModel : wideModel;
+            contextModel.copyBipedStateTo(legsModel);
+            legsModel.setVisible(false);
+            legsModel.leftLeg.visible = true;
+            legsModel.rightLeg.visible = true;
+            legsModel.leftPants.visible = true;
+            legsModel.rightPants.visible = true;
+            legsModel.leftPants.copyTransform(legsModel.leftLeg);
+            legsModel.rightPants.copyTransform(legsModel.rightLeg);
+            model = legsModel;
         } else if (slot == EquipmentSlot.FEET) {
             contextModel.copyBipedStateTo(bootsModel);
             bootsModel.setVisible(false);

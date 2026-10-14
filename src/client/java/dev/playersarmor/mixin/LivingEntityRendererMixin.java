@@ -37,7 +37,8 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity> {
 
         boolean hideHead = playersarmor$hasSkin(entity, EquipmentSlot.HEAD);
         boolean hideChest = playersarmor$hasSkin(entity, EquipmentSlot.CHEST);
-        if (!hideHead && !hideChest) {
+        boolean hideLegs = playersarmor$hasSkin(entity, EquipmentSlot.LEGS);
+        if (!hideHead && !hideChest && !hideLegs) {
             original.call(model, matrices, vertices, light, overlay, color);
             return;
         }
@@ -50,6 +51,12 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity> {
                 visibility.hide(biped.body, biped.leftArm, biped.rightArm);
                 if (biped instanceof PlayerEntityModel<?> player) {
                     visibility.hide(player.jacket, player.leftSleeve, player.rightSleeve);
+                }
+            }
+            if (hideLegs) {
+                visibility.hide(biped.leftLeg, biped.rightLeg);
+                if (biped instanceof PlayerEntityModel<?> player) {
+                    visibility.hide(player.leftPants, player.rightPants);
                 }
             }
             original.call(model, matrices, vertices, light, overlay, color);

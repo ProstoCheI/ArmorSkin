@@ -5,7 +5,9 @@
   "client": [
     "ArmorFeatureRendererMixin",
     "ItemRendererMixin",
-    "LivingEntityRendererMixin"
+    "LivingEntityRendererMixin",
+    "ItemStackMixin",
+    "AnvilScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1

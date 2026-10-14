@@ -17,6 +17,27 @@ public class ArmorNameParser {
         return parts.length < 2 ? "" : parts[1];
     }
 
+    public static String removeFlags(String name) {
+        if (name == null) {
+            return null;
+        }
+
+        String[] tokens = name.trim().split("\\s+");
+        StringBuilder visible = new StringBuilder();
+        boolean removed = false;
+        for (String token : tokens) {
+            if (token.matches("-[A-Za-z]")) {
+                removed = true;
+                continue;
+            }
+            if (!visible.isEmpty()) {
+                visible.append(' ');
+            }
+            visible.append(token);
+        }
+        return removed ? visible.toString() : name;
+    }
+
     public static boolean hasFlag(String flags, char flag) {
         if (flags == null || flags.isBlank()) {
             return false;

@@ -21,6 +21,9 @@ public final class SkinArmorRenderer<T extends LivingEntity> {
     private final PlayerEntityModel<T> wideModel = new PlayerEntityModel<>(
             PlayerEntityModel.getTexturedModelData(new Dilation(0.6F), false)
                     .getRoot().createPart(64, 64), false);
+    private final PlayerEntityModel<T> replacementModel = new PlayerEntityModel<>(
+            PlayerEntityModel.getTexturedModelData(Dilation.NONE, false)
+                    .getRoot().createPart(64, 64), false);
     private final SkinBootsModel<T> bootsModel = new SkinBootsModel<>();
 
     public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light,
@@ -35,7 +38,7 @@ public final class SkinArmorRenderer<T extends LivingEntity> {
             model.hat.visible = true;
             model.hat.copyTransform(model.head);
         } else if (slot == EquipmentSlot.CHEST) {
-            PlayerEntityModel<T> chestModel = wideModel;
+            PlayerEntityModel<T> chestModel = replacement ? replacementModel : wideModel;
             contextModel.copyBipedStateTo(chestModel);
             chestModel.setVisible(false);
             chestModel.body.visible = true;

@@ -25,12 +25,20 @@ public final class SkinArmorRenderer<T extends LivingEntity> {
     private final PlayerEntityModel<T> replacementModel = new PlayerEntityModel<>(
             PlayerEntityModel.getTexturedModelData(Dilation.NONE, false)
                     .getRoot().createPart(64, 64), false);
+    private final PlayerEntityModel<T> slimModel = new PlayerEntityModel<>(
+            PlayerEntityModel.getTexturedModelData(new Dilation(0.6F), true)
+                    .getRoot().createPart(64, 64), true);
+    private final PlayerEntityModel<T> replacementSlimModel = new PlayerEntityModel<>(
+            PlayerEntityModel.getTexturedModelData(Dilation.NONE, true)
+                    .getRoot().createPart(64, 64), true);
     private final SkinBootsModel<T> bootsModel = new SkinBootsModel<>();
     private final SkinBootsModel<T> replacementBootsModel = new SkinBootsModel<>(0.0F);
 
     public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light,
-                       BipedEntityModel<T> contextModel, EquipmentSlot slot, SkinTextures skin,
-                       boolean glint, boolean replacement, @Nullable ArmorAppearance boots) {
+                       BipedEntityModel<T> contextModel, ArmorAppearance appearance, SkinTextures skin,
+                       boolean glint, @Nullable ArmorAppearance boots) {
+        EquipmentSlot slot = appearance.slot();
+        boolean replacement = ArmorNameParser.hasFlag(appearance.flags(), 'r');
         BipedEntityModel<T> model;
         if (slot == EquipmentSlot.HEAD) {
             model = replacement ? replacementHeadModel : headModel;
@@ -40,7 +48,7 @@ public final class SkinArmorRenderer<T extends LivingEntity> {
             model.hat.visible = true;
             model.hat.copyTransform(model.head);
         } else if (slot == EquipmentSlot.CHEST) {
-            PlayerEntityModel<T> chestModel = replacement ? replacementModel : wideModel;
+            PlayerEntityModel<T> chestModel = getChestModel(appearance);
             contextModel.copyBipedStateTo(chestModel);
             chestModel.setVisible(false);
             chestModel.body.visible = true;
@@ -82,5 +90,14 @@ public final class SkinArmorRenderer<T extends LivingEntity> {
         } else {
             model.render(matrices, vertices, light, OverlayTexture.DEFAULT_UV);
         }
+    }
+
+    private PlayerEntityModel<T> getChestModel(ArmorAppearance appearance) {
+        boolean replacement = ArmorNameParser.hasFlag(appearance.flags(), 'r');
+        boolean slim = ArmorNameParser.hasFlag(appearance.flags(), 's');
+        if (replacement) {
+            return slim ? replacementSlimModel : replacementModel;
+        }
+        return slim ? slimModel : wideModel;
     }
 }

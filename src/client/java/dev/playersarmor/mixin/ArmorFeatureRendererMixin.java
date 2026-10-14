@@ -129,7 +129,7 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity>
         }
 
         playersarmor$renderer.render(matrices, vertexConsumers, light, getContextModel(),
-                slot, skin, stack.hasGlint(), ArmorNameParser.hasFlag(appearance.flags(), 'r'), boots);
+                appearance, skin, stack.hasGlint(), boots);
         ci.cancel();
     }
 }

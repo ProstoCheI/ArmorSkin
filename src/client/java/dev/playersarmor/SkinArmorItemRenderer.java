@@ -15,8 +15,8 @@ import net.minecraft.entity.LivingEntity;
 public final class SkinArmorItemRenderer {
     private final BipedEntityModel<LivingEntity> headModel = new BipedEntityModel<>(
             BipedEntityModel.getModelData(Dilation.NONE, 0.0F).getRoot().createPart(64, 64));
-    private final PlayerEntityModel<LivingEntity> chestModel = new PlayerEntityModel<>(
-            PlayerEntityModel.getTexturedModelData(Dilation.NONE, false).getRoot().createPart(64, 64), false);
+    private final PlayerEntityModel<LivingEntity> chestModel = createChestModel(false);
+    private final PlayerEntityModel<LivingEntity> slimChestModel = createChestModel(true);
     private final PlayerEntityModel<LivingEntity> legsModel = new PlayerEntityModel<>(
             PlayerEntityModel.getTexturedModelData(Dilation.NONE, false).getRoot().createPart(64, 64), false);
     private final SkinBootsModel<LivingEntity> bootsModel = new SkinBootsModel<>(0.0F);
@@ -26,15 +26,6 @@ public final class SkinArmorItemRenderer {
         headModel.setVisible(false);
         headModel.head.visible = true;
         headModel.hat.visible = true;
-
-        chestModel.child = false;
-        chestModel.setVisible(false);
-        chestModel.body.visible = true;
-        chestModel.leftArm.visible = true;
-        chestModel.rightArm.visible = true;
-        chestModel.jacket.visible = true;
-        chestModel.leftSleeve.visible = true;
-        chestModel.rightSleeve.visible = true;
 
         legsModel.child = false;
         legsModel.setVisible(false);
@@ -52,7 +43,8 @@ public final class SkinArmorItemRenderer {
     }
 
     public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers,
-                       int light, int overlay, EquipmentSlot slot, SkinTextures skin, boolean glint) {
+                       int light, int overlay, ArmorAppearance appearance, SkinTextures skin, boolean glint) {
+        EquipmentSlot slot = appearance.slot();
         BipedEntityModel<LivingEntity> model;
         if (slot == EquipmentSlot.HEAD) {
             matrices.translate(0.0F, -0.5F, 0.0F);
@@ -62,7 +54,7 @@ public final class SkinArmorItemRenderer {
             matrices.translate(0.0F, -0.25F, 0.0F);
             matrices.scale(0.75F, -0.75F, -0.75F);
             matrices.translate(0.0F, -0.375F, 0.0F);
-            model = chestModel;
+            model = getChestModel(appearance);
         } else if (slot == EquipmentSlot.LEGS) {
             matrices.translate(0.0F, -0.25F, 0.0F);
             matrices.scale(0.9F, -0.9F, -0.9F);
@@ -80,5 +72,23 @@ public final class SkinArmorItemRenderer {
         VertexConsumer vertices = ItemRenderer.getItemGlintConsumer(vertexConsumers,
                 RenderLayer.getEntityTranslucent(skin.texture()), true, glint);
         model.render(matrices, vertices, light, overlay);
+    }
+
+    private PlayerEntityModel<LivingEntity> getChestModel(ArmorAppearance appearance) {
+        return ArmorNameParser.hasFlag(appearance.flags(), 's') ? slimChestModel : chestModel;
+    }
+
+    private static PlayerEntityModel<LivingEntity> createChestModel(boolean slim) {
+        PlayerEntityModel<LivingEntity> model = new PlayerEntityModel<>(
+                PlayerEntityModel.getTexturedModelData(Dilation.NONE, slim).getRoot().createPart(64, 64), slim);
+        model.child = false;
+        model.setVisible(false);
+        model.body.visible = true;
+        model.leftArm.visible = true;
+        model.rightArm.visible = true;
+        model.jacket.visible = true;
+        model.leftSleeve.visible = true;
+        model.rightSleeve.visible = true;
+        return model;
     }
 }

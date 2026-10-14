@@ -50,7 +50,7 @@ public abstract class ItemRendererMixin {
             models.getModel(Items.PLAYER_HEAD).getTransformation().getTransformation(mode)
                     .apply(leftHanded, matrices);
             playersarmor$itemRenderer.render(matrices, vertexConsumers, light, overlay,
-                    appearance.slot(), skin, stack.hasGlint());
+                    appearance, skin, stack.hasGlint());
         } finally {
             matrices.pop();
         }

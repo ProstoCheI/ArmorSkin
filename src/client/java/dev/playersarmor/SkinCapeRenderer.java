@@ -27,7 +27,8 @@ public final class SkinCapeRenderer {
 
     public static boolean shouldRender(ArmorAppearance appearance, SkinTextures skin) {
         return appearance.slot() == EquipmentSlot.CHEST
-                && ArmorNameParser.hasFlag(appearance.flags(), 'c') && skin.capeTexture() != null;
+                && ArmorNameParser.hasFlag(appearance.flags(), 'c')
+                && !ArmorNameParser.hasFlag(appearance.flags(), 'e') && skin.capeTexture() != null;
     }
 
     public void render(MatrixStack matrices, VertexConsumerProvider vertices, int light, int overlay,

@@ -21,6 +21,7 @@ public final class SkinArmorItemRenderer {
             PlayerEntityModel.getTexturedModelData(Dilation.NONE, false).getRoot().createPart(64, 64), false);
     private final SkinBootsModel<LivingEntity> bootsModel = new SkinBootsModel<>(0.0F);
     private final SkinCapeRenderer capeRenderer = new SkinCapeRenderer();
+    private final SkinElytraRenderer elytraRenderer = new SkinElytraRenderer();
 
     public SkinArmorItemRenderer() {
         headModel.child = false;
@@ -53,7 +54,7 @@ public final class SkinArmorItemRenderer {
             model = headModel;
         } else if (slot == EquipmentSlot.CHEST) {
             matrices.translate(0.0F, -0.25F, 0.0F);
-            if (SkinCapeRenderer.shouldRender(appearance, skin)) {
+            if (SkinCapeRenderer.shouldRender(appearance, skin) || SkinElytraRenderer.shouldRender(appearance)) {
                 matrices.scale(0.65F, -0.65F, -0.65F);
                 matrices.translate(0.0F, -0.5F, 0.0F);
             } else {
@@ -82,8 +83,14 @@ public final class SkinArmorItemRenderer {
         } else {
             model.render(matrices, vertices, light, overlay);
         }
+        boolean elytra = SkinElytraRenderer.shouldRender(appearance);
+        if (elytra) {
+            elytraRenderer.render(matrices, vertexConsumers, light, overlay,
+                    model.body, appearance, skin, model.child, 0.0F, glint, null);
+        }
         if (SkinCapeRenderer.shouldRender(appearance, skin)) {
-            capeRenderer.render(matrices, vertexConsumers, light, overlay, model.body, skin, model.child, 0.0F);
+            capeRenderer.render(matrices, vertexConsumers, light, overlay,
+                    model.body, skin, model.child, 0.0F, null, 0.0F);
         }
     }
 

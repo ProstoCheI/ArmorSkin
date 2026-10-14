@@ -23,7 +23,8 @@ public abstract class CapeFeatureRendererMixin {
                                               float headYaw, float headPitch, CallbackInfo ci) {
         ArmorAppearance appearance = ArmorAppearance.fromStack(player.getEquippedStack(EquipmentSlot.CHEST));
         if (appearance != null && appearance.slot() == EquipmentSlot.CHEST
-                && ArmorNameParser.hasFlag(appearance.flags(), 'c')
+                && (ArmorNameParser.hasFlag(appearance.flags(), 'c')
+                    || ArmorNameParser.hasFlag(appearance.flags(), 'e'))
                 && PlayerSkinCache.getSkin(appearance.username()) != null) {
             ci.cancel();
         }

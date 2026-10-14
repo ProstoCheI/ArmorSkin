@@ -22,6 +22,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.Locale;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
@@ -48,6 +49,13 @@ public final class PlayerSkinCache {
                     });
 
     private PlayerSkinCache() {
+    }
+
+    public static int reload() {
+        List<String> usernames = List.copyOf(CACHE.asMap().keySet());
+        CACHE.invalidateAll();
+        usernames.forEach(CACHE::getUnchecked);
+        return usernames.size();
     }
 
     @Nullable

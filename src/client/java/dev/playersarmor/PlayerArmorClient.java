@@ -10,6 +10,7 @@ public class PlayerArmorClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        LOGGER.info("Player Armor initialized");
+        PlayerArmorCommands.register();
+        LOGGER.info("Player Armor success!");
     }
 }

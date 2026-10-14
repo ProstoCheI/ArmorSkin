@@ -55,4 +55,24 @@ public class ArmorNameParser {
     public static boolean isValidUsername(String username) {
         return username != null && username.matches("[A-Za-z0-9_]{3,16}");
     }
+
+    public static String setFlag(String name, char flag, boolean enabled) {
+        if (extractUsername(name) == null || !Character.toString(flag).matches("[A-Za-z]")) {
+            return name;
+        }
+        String token = "-" + flag;
+        StringBuilder result = new StringBuilder();
+        for (String part : name.trim().split("\\s+")) {
+            if (!part.equals(token)) {
+                if (!result.isEmpty()) {
+                    result.append(' ');
+                }
+                result.append(part);
+            }
+        }
+        if (enabled) {
+            result.append(' ').append(token);
+        }
+        return result.toString();
+    }
 }

@@ -3,6 +3,8 @@ package dev.playersarmor;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.SettableFuture;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.authlib.GameProfile;
@@ -31,8 +33,19 @@ public final class PlayerSkinCache {
     private static final LoadingCache<String, CompletableFuture<Optional<SkinTextures>>> CACHE =
             CacheBuilder.newBuilder()
                     .maximumSize(256)
-                    .expireAfterWrite(Duration.ofMinutes(5))
-                    .build(CacheLoader.from(PlayerSkinCache::load));
+                    .refreshAfterWrite(Duration.ofMinutes(5))
+                    .build(new CacheLoader<>() {
+                        @Override
+                        public CompletableFuture<Optional<SkinTextures>> load(String username) {
+                            return PlayerSkinCache.load(username);
+                        }
+
+                        @Override
+                        public ListenableFuture<CompletableFuture<Optional<SkinTextures>>> reload(
+                                String username, CompletableFuture<Optional<SkinTextures>> previous) {
+                            return retainLoadedSkin(previous, PlayerSkinCache.load(username));
+                        }
+                    });
 
     private PlayerSkinCache() {
     }
@@ -60,6 +73,16 @@ public final class PlayerSkinCache {
                     }
                     return Optional.ofNullable(skin);
                 });
+    }
+
+    private static ListenableFuture<CompletableFuture<Optional<SkinTextures>>> retainLoadedSkin(
+            CompletableFuture<Optional<SkinTextures>> previous,
+            CompletableFuture<Optional<SkinTextures>> refresh) {
+        SettableFuture<CompletableFuture<Optional<SkinTextures>>> result = SettableFuture.create();
+        refresh.whenComplete((skin, error) -> result.set(error == null && skin != null && skin.isPresent()
+                ? CompletableFuture.completedFuture(skin)
+                : previous));
+        return result;
     }
 
     @Nullable

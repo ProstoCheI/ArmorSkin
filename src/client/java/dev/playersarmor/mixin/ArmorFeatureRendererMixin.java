@@ -38,6 +38,9 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity>
     @Unique
     private float playersarmor$bootDilation = Float.NaN;
 
+    @Unique
+    private float playersarmor$tickDelta;
+
     protected ArmorFeatureRendererMixin(FeatureRendererContext<T, BipedEntityModel<T>> context) {
         super(context);
     }
@@ -48,6 +51,8 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity>
                                               float tickDelta, float animationProgress, float headYaw,
                                               float headPitch, Operation<Void> original) {
         float previous = playersarmor$bootDilation;
+        float previousTickDelta = playersarmor$tickDelta;
+        playersarmor$tickDelta = tickDelta;
         playersarmor$bootDilation = Float.NaN;
         ArmorAppearance boots = ArmorAppearance.fromStack(entity.getEquippedStack(EquipmentSlot.FEET));
         if ((entity instanceof PlayerEntity || entity instanceof ArmorStandEntity)
@@ -60,6 +65,7 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity>
                     tickDelta, animationProgress, headYaw, headPitch);
         } finally {
             playersarmor$bootDilation = previous;
+            playersarmor$tickDelta = previousTickDelta;
         }
     }
 
@@ -129,7 +135,7 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity>
         }
 
         playersarmor$renderer.render(matrices, vertexConsumers, light, getContextModel(),
-                appearance, skin, stack.hasGlint(), boots);
+                appearance, skin, stack.hasGlint(), boots, entity, playersarmor$tickDelta);
         ci.cancel();
     }
 }

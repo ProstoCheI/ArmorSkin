@@ -37,7 +37,7 @@ public final class SkinArmorRenderer<T extends LivingEntity> {
 
     public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light,
                        BipedEntityModel<T> contextModel, ArmorAppearance appearance, SkinTextures skin,
-                       boolean glint, @Nullable ArmorAppearance boots) {
+                       boolean glint, @Nullable ArmorAppearance boots, T wearer, float tickDelta) {
         EquipmentSlot slot = appearance.slot();
         boolean replacement = ArmorNameParser.hasFlag(appearance.flags(), 'r');
         BipedEntityModel<T> model;
@@ -93,7 +93,7 @@ public final class SkinArmorRenderer<T extends LivingEntity> {
         }
         if (SkinCapeRenderer.shouldRender(appearance, skin)) {
             capeRenderer.render(matrices, vertexConsumers, light, OverlayTexture.DEFAULT_UV,
-                    model.body, skin, model.child, replacement ? 0.0F : 0.6F);
+                    model.body, skin, model.child, replacement ? 0.0F : 0.6F, wearer, tickDelta);
         }
     }
 

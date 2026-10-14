@@ -84,9 +84,9 @@ public final class SkinArmorRenderer<T extends LivingEntity> {
 
         VertexConsumer vertices = ItemRenderer.getArmorGlintConsumer(vertexConsumers,
                 RenderLayer.getArmorCutoutNoCull(skin.texture()), glint);
-        if (slot == EquipmentSlot.LEGS && boots != null) {
-            float bootDilation = ArmorNameParser.hasFlag(boots.flags(), 'r') ? 0.0F : 0.95F;
-            UpperLegRenderer.render(model, matrices, vertices, light, OverlayTexture.DEFAULT_UV, -1, bootDilation);
+        if (slot == EquipmentSlot.LEGS) {
+            float bootDilation = boots != null && !ArmorNameParser.hasFlag(boots.flags(), 'r') ? 0.95F : 0.0F;
+            LegSectionRenderer.renderUpper(model, matrices, vertices, light, OverlayTexture.DEFAULT_UV, -1, bootDilation);
         } else {
             model.render(matrices, vertices, light, OverlayTexture.DEFAULT_UV);
         }

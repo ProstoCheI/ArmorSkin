@@ -7,7 +7,8 @@
     "ItemRendererMixin",
     "LivingEntityRendererMixin",
     "ItemStackMixin",
-    "AnvilScreenMixin"
+    "AnvilScreenMixin",
+    "ArmorStandModelAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

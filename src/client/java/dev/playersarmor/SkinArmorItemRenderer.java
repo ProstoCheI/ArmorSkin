@@ -58,7 +58,7 @@ public final class SkinArmorItemRenderer {
         } else if (slot == EquipmentSlot.LEGS) {
             matrices.translate(0.0F, -0.25F, 0.0F);
             matrices.scale(0.9F, -0.9F, -0.9F);
-            matrices.translate(0.0F, -1.125F, 0.0F);
+            matrices.translate(0.0F, -1.0F, 0.0F);
             model = legsModel;
         } else if (slot == EquipmentSlot.FEET) {
             matrices.translate(0.0F, -0.25F, 0.0F);
@@ -71,7 +71,11 @@ public final class SkinArmorItemRenderer {
 
         VertexConsumer vertices = ItemRenderer.getItemGlintConsumer(vertexConsumers,
                 RenderLayer.getEntityTranslucent(skin.texture()), true, glint);
-        model.render(matrices, vertices, light, overlay);
+        if (slot == EquipmentSlot.LEGS) {
+            LegSectionRenderer.renderUpper(model, matrices, vertices, light, overlay, -1, 0.0F);
+        } else {
+            model.render(matrices, vertices, light, overlay);
+        }
     }
 
     private PlayerEntityModel<LivingEntity> getChestModel(ArmorAppearance appearance) {

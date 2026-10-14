@@ -6,7 +6,7 @@ import dev.playersarmor.ArmorAppearance;
 import dev.playersarmor.ArmorNameParser;
 import dev.playersarmor.ModelPartVisibility;
 import dev.playersarmor.PlayerSkinCache;
-import dev.playersarmor.UpperLegRenderer;
+import dev.playersarmor.LegSectionRenderer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
@@ -56,6 +56,10 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity> {
                 if (biped instanceof PlayerEntityModel<?> player) {
                     visibility.hide(player.jacket, player.leftSleeve, player.rightSleeve);
                 }
+                if (biped instanceof ArmorStandModelAccessor stand) {
+                    visibility.hide(stand.playersarmor$getRightBodyStick(), stand.playersarmor$getLeftBodyStick(),
+                            stand.playersarmor$getShoulderStick());
+                }
             }
             if (hideLegs || boots != null) {
                 visibility.hide(biped.leftLeg, biped.rightLeg);
@@ -67,7 +71,9 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity> {
         }
         if (boots != null && !hideLegs) {
             float bootDilation = ArmorNameParser.hasFlag(boots.flags(), 'r') ? 0.0F : 0.95F;
-            UpperLegRenderer.render(biped, matrices, vertices, light, overlay, color, bootDilation);
+            LegSectionRenderer.renderUpper(biped, matrices, vertices, light, overlay, color, bootDilation);
+        } else if (hideLegs && boots == null) {
+            LegSectionRenderer.renderLower(biped, matrices, vertices, light, overlay, color);
         }
     }
 

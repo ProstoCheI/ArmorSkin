@@ -8,7 +8,7 @@ import dev.playersarmor.ArmorNameParser;
 import dev.playersarmor.ModelPartVisibility;
 import dev.playersarmor.PlayerSkinCache;
 import dev.playersarmor.SkinArmorRenderer;
-import dev.playersarmor.UpperLegRenderer;
+import dev.playersarmor.LegSectionRenderer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.ArmorFeatureRenderer;
@@ -97,7 +97,7 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity>
             }
             original.run();
         }
-        UpperLegRenderer.render(model, matrices, vertices, light, overlay, color, playersarmor$bootDilation);
+        LegSectionRenderer.renderUpper(model, matrices, vertices, light, overlay, color, playersarmor$bootDilation);
     }
 
     @Inject(method = "renderArmor", at = @At("HEAD"), cancellable = true)

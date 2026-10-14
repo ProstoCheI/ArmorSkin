@@ -12,6 +12,7 @@ import net.minecraft.client.util.SkinTextures;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
+import org.jetbrains.annotations.Nullable;
 
 public final class SkinArmorRenderer<T extends LivingEntity> {
     private final BipedEntityModel<T> headModel = new BipedEntityModel<>(
@@ -25,10 +26,11 @@ public final class SkinArmorRenderer<T extends LivingEntity> {
             PlayerEntityModel.getTexturedModelData(Dilation.NONE, false)
                     .getRoot().createPart(64, 64), false);
     private final SkinBootsModel<T> bootsModel = new SkinBootsModel<>();
+    private final SkinBootsModel<T> replacementBootsModel = new SkinBootsModel<>(0.0F);
 
     public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light,
                        BipedEntityModel<T> contextModel, EquipmentSlot slot, SkinTextures skin,
-                       boolean glint, boolean replacement) {
+                       boolean glint, boolean replacement, @Nullable ArmorAppearance boots) {
         BipedEntityModel<T> model;
         if (slot == EquipmentSlot.HEAD) {
             model = replacement ? replacementHeadModel : headModel;
@@ -63,17 +65,22 @@ public final class SkinArmorRenderer<T extends LivingEntity> {
             legsModel.rightPants.copyTransform(legsModel.rightLeg);
             model = legsModel;
         } else if (slot == EquipmentSlot.FEET) {
-            contextModel.copyBipedStateTo(bootsModel);
-            bootsModel.setVisible(false);
-            bootsModel.leftLeg.visible = true;
-            bootsModel.rightLeg.visible = true;
-            model = bootsModel;
+            model = replacement ? replacementBootsModel : bootsModel;
+            contextModel.copyBipedStateTo(model);
+            model.setVisible(false);
+            model.leftLeg.visible = true;
+            model.rightLeg.visible = true;
         } else {
             return;
         }
 
         VertexConsumer vertices = ItemRenderer.getArmorGlintConsumer(vertexConsumers,
                 RenderLayer.getArmorCutoutNoCull(skin.texture()), glint);
-        model.render(matrices, vertices, light, OverlayTexture.DEFAULT_UV);
+        if (slot == EquipmentSlot.LEGS && boots != null) {
+            float bootDilation = ArmorNameParser.hasFlag(boots.flags(), 'r') ? 0.0F : 0.95F;
+            UpperLegRenderer.render(model, matrices, vertices, light, OverlayTexture.DEFAULT_UV, -1, bootDilation);
+        } else {
+            model.render(matrices, vertices, light, OverlayTexture.DEFAULT_UV);
+        }
     }
 }

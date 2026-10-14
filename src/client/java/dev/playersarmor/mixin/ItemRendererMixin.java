@@ -10,7 +10,6 @@ import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.SkinTextures;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import org.spongepowered.asm.mixin.Final;
@@ -37,9 +36,7 @@ public abstract class ItemRendererMixin {
                                              VertexConsumerProvider vertexConsumers,
                                              int light, int overlay, BakedModel model, CallbackInfo ci) {
         ArmorAppearance appearance = ArmorAppearance.fromStack(stack);
-        if (appearance == null
-                || (appearance.slot() != EquipmentSlot.HEAD && appearance.slot() != EquipmentSlot.CHEST
-                && appearance.slot() != EquipmentSlot.LEGS)) {
+        if (appearance == null) {
             return;
         }
 

@@ -12,10 +12,14 @@ import java.util.Map;
 
 public final class SkinBootsModel<T extends LivingEntity> extends BipedEntityModel<T> {
     public SkinBootsModel() {
-        super(createRoot());
+        this(0.95F);
     }
 
-    private static ModelPart createRoot() {
+    public SkinBootsModel(float dilation) {
+        super(createRoot(dilation));
+    }
+
+    private static ModelPart createRoot(float dilation) {
         ModelPart template = BipedEntityModel.getModelData(Dilation.NONE, 0.0F)
                 .getRoot().createPart(64, 64);
         return new ModelPart(List.of(), Map.of(
@@ -24,13 +28,13 @@ public final class SkinBootsModel<T extends LivingEntity> extends BipedEntityMod
                 "body", template.getChild("body"),
                 "left_arm", template.getChild("left_arm"),
                 "right_arm", template.getChild("right_arm"),
-                "left_leg", createFoot(16, 48, 0, 48),
-                "right_leg", createFoot(0, 16, 0, 32)));
+                "left_leg", createFoot(16, 48, 0, 48, dilation),
+                "right_leg", createFoot(0, 16, 0, 32, dilation)));
     }
 
-    private static ModelPart createFoot(int textureU, int textureV, int overlayU, int overlayV) {
-        ModelPart overlay = new ModelPart(createCuboids(overlayU, overlayV, 1.2F), Map.of());
-        return new ModelPart(createCuboids(textureU, textureV, 0.95F), Map.of("overlay", overlay));
+    private static ModelPart createFoot(int textureU, int textureV, int overlayU, int overlayV, float dilation) {
+        ModelPart overlay = new ModelPart(createCuboids(overlayU, overlayV, dilation + 0.25F), Map.of());
+        return new ModelPart(createCuboids(textureU, textureV, dilation), Map.of("overlay", overlay));
     }
 
     private static List<ModelPart.Cuboid> createCuboids(int textureU, int textureV, float dilation) {

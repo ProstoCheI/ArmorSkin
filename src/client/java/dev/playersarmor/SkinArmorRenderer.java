@@ -33,6 +33,7 @@ public final class SkinArmorRenderer<T extends LivingEntity> {
                     .getRoot().createPart(64, 64), true);
     private final SkinBootsModel<T> bootsModel = new SkinBootsModel<>();
     private final SkinBootsModel<T> replacementBootsModel = new SkinBootsModel<>(0.0F);
+    private final SkinCapeRenderer capeRenderer = new SkinCapeRenderer();
 
     public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light,
                        BipedEntityModel<T> contextModel, ArmorAppearance appearance, SkinTextures skin,
@@ -89,6 +90,10 @@ public final class SkinArmorRenderer<T extends LivingEntity> {
             LegSectionRenderer.renderUpper(model, matrices, vertices, light, OverlayTexture.DEFAULT_UV, -1, bootDilation);
         } else {
             model.render(matrices, vertices, light, OverlayTexture.DEFAULT_UV);
+        }
+        if (SkinCapeRenderer.shouldRender(appearance, skin)) {
+            capeRenderer.render(matrices, vertexConsumers, light, OverlayTexture.DEFAULT_UV,
+                    model.body, skin, model.child, replacement ? 0.0F : 0.6F);
         }
     }
 

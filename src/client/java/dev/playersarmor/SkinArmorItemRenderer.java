@@ -20,6 +20,7 @@ public final class SkinArmorItemRenderer {
     private final PlayerEntityModel<LivingEntity> legsModel = new PlayerEntityModel<>(
             PlayerEntityModel.getTexturedModelData(Dilation.NONE, false).getRoot().createPart(64, 64), false);
     private final SkinBootsModel<LivingEntity> bootsModel = new SkinBootsModel<>(0.0F);
+    private final SkinCapeRenderer capeRenderer = new SkinCapeRenderer();
 
     public SkinArmorItemRenderer() {
         headModel.child = false;
@@ -52,8 +53,13 @@ public final class SkinArmorItemRenderer {
             model = headModel;
         } else if (slot == EquipmentSlot.CHEST) {
             matrices.translate(0.0F, -0.25F, 0.0F);
-            matrices.scale(0.75F, -0.75F, -0.75F);
-            matrices.translate(0.0F, -0.375F, 0.0F);
+            if (SkinCapeRenderer.shouldRender(appearance, skin)) {
+                matrices.scale(0.65F, -0.65F, -0.65F);
+                matrices.translate(0.0F, -0.5F, 0.0F);
+            } else {
+                matrices.scale(0.75F, -0.75F, -0.75F);
+                matrices.translate(0.0F, -0.375F, 0.0F);
+            }
             model = getChestModel(appearance);
         } else if (slot == EquipmentSlot.LEGS) {
             matrices.translate(0.0F, -0.25F, 0.0F);
@@ -75,6 +81,9 @@ public final class SkinArmorItemRenderer {
             LegSectionRenderer.renderUpper(model, matrices, vertices, light, overlay, -1, 0.0F);
         } else {
             model.render(matrices, vertices, light, overlay);
+        }
+        if (SkinCapeRenderer.shouldRender(appearance, skin)) {
+            capeRenderer.render(matrices, vertexConsumers, light, overlay, model.body, skin, model.child, 0.0F);
         }
     }
 

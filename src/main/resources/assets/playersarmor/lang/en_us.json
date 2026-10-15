@@ -1,6 +1,6 @@
 {
-  "playersarmor.flags.open": "Choose armor flags",
-  "playersarmor.flags.title": "Armor flags",
+  "playersarmor.flags.open": "Armor tags",
+  "playersarmor.flags.title": "Tags",
   "playersarmor.flags.r": "-r Replace body",
   "playersarmor.flags.s": "-s Slim arms",
   "playersarmor.flags.c": "-c Cape",
@@ -10,6 +10,8 @@
   "playersarmor.flags.c.tooltip": "Show the named player's cape. With -e, apply its texture to the elytra instead.",
   "playersarmor.flags.e.tooltip": "Show standard elytra. With -c, use the named player's cape texture. Does not enable flight.",
   "playersarmor.flags.enter_name": "Enter a player name first",
+  "playersarmor.flags.chest_only": "Only available for chestplates",
+  "playersarmor.flags.name_limit": "Not enough room in the item name",
   "playersarmor.flags.cape_elytra": "-c + -e: textured elytra",
   "playersarmor.command.reload": "Player Armor: cache cleared. Reloading skins: %s."
 }

@@ -16,17 +16,17 @@ import java.util.List;
 import java.util.function.Supplier;
 
 public final class ArmorFlagPanel implements Drawable {
-    public static final int WIDTH = 128;
-    public static final int GAP = 4;
-    private static final int HEIGHT = 134;
+    public static final int WIDTH = 50;
+    public static final int GAP = 1;
+    private static final int HEIGHT = 166;
     private static final int NAME_LIMIT = 50;
     private static final char[] FLAGS = {'r', 's', 'c', 'e'};
     private final TextRenderer textRenderer;
     private final TextFieldWidget nameField;
     private final Supplier<ItemStack> input;
     private final Runnable layout;
-    private final ButtonWidget toggle;
-    private final List<ButtonWidget> options = new ArrayList<>();
+    private final ArmorTagButton toggle;
+    private final List<ArmorTagButton> options = new ArrayList<>();
     private boolean open;
     private int x;
     private int y;
@@ -37,13 +37,14 @@ public final class ArmorFlagPanel implements Drawable {
         this.nameField = nameField;
         this.input = input;
         this.layout = layout;
-        toggle = ButtonWidget.builder(Text.literal("+"), button -> setOpen(!open))
-                .dimensions(0, 0, 18, 16)
-                .tooltip(Tooltip.of(Text.translatable("playersarmor.flags.open"))).build();
+        toggle = new ArmorTagButton('\0', Text.translatable("playersarmor.flags.open"), button -> setOpen(!open));
+        toggle.setTooltip(Tooltip.of(Text.translatable("playersarmor.flags.open")));
         for (char flag : FLAGS) {
-            options.add(ButtonWidget.builder(Text.empty(), button -> toggleFlag(flag))
-                    .dimensions(0, 0, WIDTH - 12, 20)
-                    .tooltip(Tooltip.of(Text.translatable("playersarmor.flags." + flag + ".tooltip"))).build());
+            Text label = Text.translatable("playersarmor.flags." + flag);
+            ArmorTagButton button = new ArmorTagButton(flag, label, clicked -> toggleFlag(flag));
+            button.setTooltip(Tooltip.of(label.copy().append("\n")
+                    .append(Text.translatable("playersarmor.flags." + flag + ".tooltip"))));
+            options.add(button);
         }
     }
 
@@ -67,9 +68,9 @@ public final class ArmorFlagPanel implements Drawable {
     public void setPosition(int anvilX, int anvilY, int anvilWidth) {
         x = anvilX + anvilWidth + GAP;
         y = anvilY;
-        toggle.setPosition(anvilX + anvilWidth - 27, anvilY + 4);
+        toggle.setPosition(anvilX + anvilWidth - 23, anvilY + 5);
         for (int i = 0; i < options.size(); i++) {
-            options.get(i).setPosition(x + 6, y + 22 + i * 23);
+            options.get(i).setPosition(x + 10 + (i % 2) * 16, y + 33 + (i / 2) * 16);
         }
     }
 
@@ -81,20 +82,34 @@ public final class ArmorFlagPanel implements Drawable {
             open = false;
             layout.run();
         }
-        toggle.setMessage(Text.literal(open ? "-" : "+"));
+        toggle.setSelected(open);
         String name = nameField.getText();
         String flags = ArmorNameParser.extractFlags(name);
         boolean valid = ArmorNameParser.extractUsername(name) != null;
         boolean chest = armor && ((ArmorItem) stack.getItem()).getSlotType() == EquipmentSlot.CHEST;
         for (int i = 0; i < FLAGS.length; i++) {
             char flag = FLAGS[i];
-            ButtonWidget button = options.get(i);
+            ArmorTagButton button = options.get(i);
             boolean selected = ArmorNameParser.hasFlag(flags, flag);
             button.visible = armor && open;
             button.active = valid && (flag == 'r' || chest)
                     && (selected || ArmorNameParser.setFlag(name, flag, true).length() <= NAME_LIMIT);
-            button.setMessage(Text.literal(selected ? "[x] " : "[ ] ")
-                    .append(Text.translatable("playersarmor.flags." + flag)));
+            button.setSelected(selected);
+            button.setMessage(Text.translatable("playersarmor.flags." + flag).append(": ")
+                    .append(Text.translatable(selected ? "options.on" : "options.off")));
+            Text description = Text.translatable("playersarmor.flags." + flag).append("\n")
+                    .append(Text.translatable("playersarmor.flags." + flag + ".tooltip"));
+            if (!valid) {
+                description = description.copy().append("\n")
+                        .append(Text.translatable("playersarmor.flags.enter_name"));
+            } else if (flag != 'r' && !chest) {
+                description = description.copy().append("\n")
+                        .append(Text.translatable("playersarmor.flags.chest_only"));
+            } else if (!button.active) {
+                description = description.copy().append("\n")
+                        .append(Text.translatable("playersarmor.flags.name_limit"));
+            }
+            button.setTooltip(Tooltip.of(description));
         }
     }
 
@@ -119,9 +134,11 @@ public final class ArmorFlagPanel implements Drawable {
         }
         context.fill(x, y, x + WIDTH, y + HEIGHT, 0xFF373737);
         context.fill(x + 1, y + 1, x + WIDTH - 1, y + HEIGHT - 1, 0xFFC6C6C6);
-        context.drawText(textRenderer, Text.translatable("playersarmor.flags.title"), x + 7, y + 7, 0x404040, false);
-        Text hint = Text.translatable(ArmorNameParser.extractUsername(nameField.getText()) == null
-                ? "playersarmor.flags.enter_name" : "playersarmor.flags.cape_elytra");
-        context.drawTextWrapped(textRenderer, hint, x + 7, y + 116, WIDTH - 14, 0x404040);
+        context.fill(x + 1, y + 1, x + WIDTH - 1, y + 3, 0xFFFFFFFF);
+        context.fill(x + 1, y + 3, x + 3, y + HEIGHT - 1, 0xFFFFFFFF);
+        context.fill(x + WIDTH - 3, y + 3, x + WIDTH - 1, y + HEIGHT - 1, 0xFF555555);
+        context.fill(x + 3, y + HEIGHT - 3, x + WIDTH - 3, y + HEIGHT - 1, 0xFF555555);
+        Text title = Text.translatable("playersarmor.flags.title");
+        context.drawText(textRenderer, title, x + (WIDTH - textRenderer.getWidth(title)) / 2, y + 18, 0x404040, false);
     }
 }

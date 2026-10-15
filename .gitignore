@@ -1,7 +1,28 @@
-.gradle/
-build/
-run/
-.idea/
-.vscode/
+# Gradle and compiled output
+/.gradle/
+/build/
+/out/
+/bin/
+*.class
+
+# Development game files and logs
+/run/
+/logs/
+*.log
+*.hprof
+
+# IDE settings
+/.idea/
+/.vscode/
 *.iml
-out/
+*.ipr
+*.iws
+/.classpath
+/.project
+/.settings/
+/.factorypath
+
+# Operating system files
+.DS_Store
+Thumbs.db
+Desktop.ini

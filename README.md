@@ -1,59 +1,59 @@
 # ArmorSkin
 
-Превратите броню в части скина любого игрока. Просто переименуйте её в наковальне, указав ник: шлем станет головой, нагрудник — торсом с руками, а поножи и ботинки — ногами со скина. Можно собрать полный образ одного игрока или смешать части разных скинов.
+Turn armor into parts of any player's skin. Rename it in an anvil using their username: helmets become heads, chestplates become torsos with arms, and leggings and boots become legs. Wear a complete skin or mix parts from different players.
 
-Мод меняет вид брони на игроках и стойках для брони. Переименованные предметы также отображаются в новом виде в инвентаре, в руке, в рамках и после выбрасывания.
+The custom models appear on players and armor stands, as well as in your inventory, in your hand, in item frames, and when dropped on the ground.
 
-## Как пользоваться
+## How to use
 
-1. Положите броню в первый слот наковальни.
-2. Введите ник игрока, например `Notch`.
-3. При желании откройте меню тегов кнопкой с четырьмя квадратиками и выберите нужные настройки. Их также можно дописать в название вручную.
-4. Заберите предмет и наденьте его или поставьте на стойку.
+1. Place a piece of armor in the first slot of an anvil.
+2. Enter a player's username, such as `Notch`.
+3. To customize its appearance, open the tag menu using the button with four squares. You can also type tags directly into the name.
+4. Take the item and equip it on yourself or an armor stand.
 
-Нужен ник аккаунта Minecraft Java Edition. При первой загрузке скина потребуется подключение к интернету; пока текстура загружается, броня может выглядеть обычно.
+Use a Minecraft Java Edition account username. An internet connection is required to load skins for the first time. Armor may keep its usual appearance while the texture loads.
 
-| Предмет | Часть скина |
+| Item | Skin part |
 | --- | --- |
-| Шлем | Голова, включая внешний слой |
-| Нагрудник | Торс и руки, включая внешний слой |
-| Поножи | Верхняя часть ног |
-| Ботинки | Нижняя часть ног |
+| Helmet | Head, including the outer skin layer |
+| Chestplate | Torso and arms, including the outer skin layer |
+| Leggings | Upper legs |
+| Boots | Lower legs |
 
-Без тегов броня выглядит как костюм немного больше обычного тела. Соответствующие части исходной модели скрываются, чтобы они не просвечивали через новый образ.
+By default, armor looks like a costume slightly larger than the player's body. The corresponding parts of the original model are hidden so they don't show through the custom skin.
 
-## Теги
+## Tags
 
-Теги пишутся после ника через пробел. Каждый состоит из тире и одной латинской буквы в нижнем регистре.
+Add tags after the username, separated by spaces. Each tag consists of a hyphen followed by a single lowercase Latin letter.
 
-| Тег | Где работает | Что меняет |
+| Tag | Applies to | Effect |
 | --- | --- | --- |
-| `-r` | Любая часть брони | Делает модель размером с обычное тело вместо объёмного костюма |
-| `-s` | Нагрудник | Включает узкие руки. Без этого тега руки широкие |
-| `-c` | Нагрудник | Показывает плащ игрока, чей ник указан в названии |
-| `-e` | Нагрудник | Показывает стандартные элитры |
-| `-c -e` | Нагрудник | Показывает элитры с текстурой плаща вместо отдельного плаща |
+| `-r` | Any armor piece | Uses the normal body size instead of the larger costume model |
+| `-s` | Chestplate | Uses slim arms. Arms are wide by default |
+| `-c` | Chestplate | Displays the named player's cape |
+| `-e` | Chestplate | Displays standard elytra |
+| `-c -e` | Chestplate | Displays elytra with the named player's cape texture, without a separate cape |
 
-Например, `Notch -r -s` — нагрудник со скином Notch, узкими руками и моделью размером с тело.
+For example, naming a chestplate `Notch -r -s` gives it Notch's skin, slim arms, and a model that matches the normal body size.
 
-Плащ и элитры используют обычную анимацию Minecraft. Если у указанного игрока нет плаща, `-c` ничего не добавит, а сочетание `-c -e` покажет стандартные элитры. Отображение элитр само по себе не даёт возможности летать.
+Capes and elytra use Minecraft's normal animations. If the named player has no cape, `-c` adds nothing and `-c -e` displays standard elytra. These elytra are cosmetic and do not let you fly.
 
-Теги видны только при переименовании в наковальне. В остальных местах у предмета отображается имя без тегов.
+Tags are only visible when renaming an item in an anvil. Everywhere else, the item's name is displayed without them.
 
-## Перезагрузка скинов
+## Reloading skins
 
-Если игрок сменил скин или текстура не загрузилась, выполните в чате:
+If a player has changed their skin or a texture failed to load, run this command in chat:
 
 ```text
 /armorskin reload
 ```
 
-Команда очищает кеш мода и запускает повторную загрузку ранее запрошенных скинов. Права оператора не нужны.
+This clears the mod's cache and starts reloading all previously requested skins. Operator permissions are not required.
 
-## Установка и игра на сервере
+## Installation and multiplayer
 
-Текущая версия предназначена для **Minecraft Java Edition 1.21.1** с **Fabric Loader 0.16.14 или новее**. Также нужен **Fabric API** для 1.21.1.
+The current version supports **Minecraft Java Edition 1.21.1** with **Fabric Loader 0.16.14 or later**. **Fabric API** for 1.21.1 is also required.
 
-Установите Fabric, затем положите файлы ArmorSkin и Fabric API в папку `mods`.
+Install Fabric, then place the ArmorSkin and Fabric API JAR files in your `mods` folder.
 
-ArmorSkin работает на клиенте: устанавливать его на сервер не нужно. Другие игроки увидят изменённую броню, если у них тоже установлен мод. Защита, прочность и остальные свойства брони остаются прежними.
+ArmorSkin runs entirely on the client and does not need to be installed on the server. Other players can see your custom armor if they also have the mod installed. Armor protection, durability, and other gameplay properties remain unchanged.

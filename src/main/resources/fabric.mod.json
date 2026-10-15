@@ -3,6 +3,7 @@
   "id": "armorskin",
   "version": "${version}",
   "name": "ArmorSkin",
+  "icon": "assets/armorskin/icon.png",
   "description": "Display player skin parts using renamed armor.",
   "environment": "client",
   "entrypoints": {

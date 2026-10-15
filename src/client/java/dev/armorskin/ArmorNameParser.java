@@ -1,4 +1,4 @@
-package dev.playersarmor;
+package dev.armorskin;
 
 public class ArmorNameParser {
     public static String extractUsername(String name) {

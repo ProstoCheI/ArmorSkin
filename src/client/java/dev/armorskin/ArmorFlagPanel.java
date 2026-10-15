@@ -1,4 +1,4 @@
-package dev.playersarmor;
+package dev.armorskin;
 
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
@@ -37,13 +37,13 @@ public final class ArmorFlagPanel implements Drawable {
         this.nameField = nameField;
         this.input = input;
         this.layout = layout;
-        toggle = new ArmorTagButton('\0', Text.translatable("playersarmor.flags.open"), button -> setOpen(!open));
-        toggle.setTooltip(Tooltip.of(Text.translatable("playersarmor.flags.open")));
+        toggle = new ArmorTagButton('\0', Text.translatable("armorskin.flags.open"), button -> setOpen(!open));
+        toggle.setTooltip(Tooltip.of(Text.translatable("armorskin.flags.open")));
         for (char flag : FLAGS) {
-            Text label = Text.translatable("playersarmor.flags." + flag);
+            Text label = Text.translatable("armorskin.flags." + flag);
             ArmorTagButton button = new ArmorTagButton(flag, label, clicked -> toggleFlag(flag));
             button.setTooltip(Tooltip.of(label.copy().append("\n")
-                    .append(Text.translatable("playersarmor.flags." + flag + ".tooltip"))));
+                    .append(Text.translatable("armorskin.flags." + flag + ".tooltip"))));
             options.add(button);
         }
     }
@@ -95,19 +95,19 @@ public final class ArmorFlagPanel implements Drawable {
             button.active = valid && (flag == 'r' || chest)
                     && (selected || ArmorNameParser.setFlag(name, flag, true).length() <= NAME_LIMIT);
             button.setSelected(selected);
-            button.setMessage(Text.translatable("playersarmor.flags." + flag).append(": ")
+            button.setMessage(Text.translatable("armorskin.flags." + flag).append(": ")
                     .append(Text.translatable(selected ? "options.on" : "options.off")));
-            Text description = Text.translatable("playersarmor.flags." + flag).append("\n")
-                    .append(Text.translatable("playersarmor.flags." + flag + ".tooltip"));
+            Text description = Text.translatable("armorskin.flags." + flag).append("\n")
+                    .append(Text.translatable("armorskin.flags." + flag + ".tooltip"));
             if (!valid) {
                 description = description.copy().append("\n")
-                        .append(Text.translatable("playersarmor.flags.enter_name"));
+                        .append(Text.translatable("armorskin.flags.enter_name"));
             } else if (flag != 'r' && !chest) {
                 description = description.copy().append("\n")
-                        .append(Text.translatable("playersarmor.flags.chest_only"));
+                        .append(Text.translatable("armorskin.flags.chest_only"));
             } else if (!button.active) {
                 description = description.copy().append("\n")
-                        .append(Text.translatable("playersarmor.flags.name_limit"));
+                        .append(Text.translatable("armorskin.flags.name_limit"));
             }
             button.setTooltip(Tooltip.of(description));
         }
@@ -138,7 +138,7 @@ public final class ArmorFlagPanel implements Drawable {
         context.fill(x + 1, y + 3, x + 3, y + HEIGHT - 1, 0xFFFFFFFF);
         context.fill(x + WIDTH - 3, y + 3, x + WIDTH - 1, y + HEIGHT - 1, 0xFF555555);
         context.fill(x + 3, y + HEIGHT - 3, x + WIDTH - 3, y + HEIGHT - 1, 0xFF555555);
-        Text title = Text.translatable("playersarmor.flags.title");
+        Text title = Text.translatable("armorskin.flags.title");
         context.drawText(textRenderer, title, x + (WIDTH - textRenderer.getWidth(title)) / 2, y + 18, 0x404040, false);
     }
 }

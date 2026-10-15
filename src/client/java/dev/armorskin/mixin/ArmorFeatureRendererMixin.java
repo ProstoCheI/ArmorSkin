@@ -1,14 +1,14 @@
-package dev.playersarmor.mixin;
+package dev.armorskin.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import dev.playersarmor.ArmorAppearance;
-import dev.playersarmor.ArmorNameParser;
-import dev.playersarmor.ModelPartVisibility;
-import dev.playersarmor.PlayerSkinCache;
-import dev.playersarmor.SkinArmorRenderer;
-import dev.playersarmor.LegSectionRenderer;
+import dev.armorskin.ArmorAppearance;
+import dev.armorskin.ArmorNameParser;
+import dev.armorskin.ModelPartVisibility;
+import dev.armorskin.PlayerSkinCache;
+import dev.armorskin.SkinArmorRenderer;
+import dev.armorskin.LegSectionRenderer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.ArmorFeatureRenderer;
@@ -33,65 +33,65 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class ArmorFeatureRendererMixin<T extends LivingEntity>
         extends FeatureRenderer<T, BipedEntityModel<T>> {
     @Unique
-    private final SkinArmorRenderer<T> playersarmor$renderer = new SkinArmorRenderer<>();
+    private final SkinArmorRenderer<T> armorskin$renderer = new SkinArmorRenderer<>();
 
     @Unique
-    private float playersarmor$bootDilation = Float.NaN;
+    private float armorskin$bootDilation = Float.NaN;
 
     @Unique
-    private float playersarmor$tickDelta;
+    private float armorskin$tickDelta;
 
     protected ArmorFeatureRendererMixin(FeatureRendererContext<T, BipedEntityModel<T>> context) {
         super(context);
     }
 
     @WrapMethod(method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/LivingEntity;FFFFFF)V")
-    private void playersarmor$withBootClipping(MatrixStack matrices, VertexConsumerProvider vertexConsumers,
+    private void armorskin$withBootClipping(MatrixStack matrices, VertexConsumerProvider vertexConsumers,
                                               int light, T entity, float limbAngle, float limbDistance,
                                               float tickDelta, float animationProgress, float headYaw,
                                               float headPitch, Operation<Void> original) {
-        float previous = playersarmor$bootDilation;
-        float previousTickDelta = playersarmor$tickDelta;
-        playersarmor$tickDelta = tickDelta;
-        playersarmor$bootDilation = Float.NaN;
+        float previous = armorskin$bootDilation;
+        float previousTickDelta = armorskin$tickDelta;
+        armorskin$tickDelta = tickDelta;
+        armorskin$bootDilation = Float.NaN;
         ArmorAppearance boots = ArmorAppearance.fromStack(entity.getEquippedStack(EquipmentSlot.FEET));
         if ((entity instanceof PlayerEntity || entity instanceof ArmorStandEntity)
                 && boots != null && boots.slot() == EquipmentSlot.FEET
                 && PlayerSkinCache.getSkin(boots.username()) != null) {
-            playersarmor$bootDilation = ArmorNameParser.hasFlag(boots.flags(), 'r') ? 0.0F : 0.95F;
+            armorskin$bootDilation = ArmorNameParser.hasFlag(boots.flags(), 'r') ? 0.0F : 0.95F;
         }
         try {
             original.call(matrices, vertexConsumers, light, entity, limbAngle, limbDistance,
                     tickDelta, animationProgress, headYaw, headPitch);
         } finally {
-            playersarmor$bootDilation = previous;
-            playersarmor$tickDelta = previousTickDelta;
+            armorskin$bootDilation = previous;
+            armorskin$tickDelta = previousTickDelta;
         }
     }
 
     @WrapOperation(method = "renderArmorParts", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/client/render/entity/model/BipedEntityModel;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;III)V"))
-    private void playersarmor$clipArmorParts(BipedEntityModel<T> model, MatrixStack matrices,
+    private void armorskin$clipArmorParts(BipedEntityModel<T> model, MatrixStack matrices,
                                            VertexConsumer vertices, int light, int overlay, int color,
                                            Operation<Void> original) {
-        playersarmor$renderClippedArmor(model, matrices, vertices, light, overlay, color,
+        armorskin$renderClippedArmor(model, matrices, vertices, light, overlay, color,
                 () -> original.call(model, matrices, vertices, light, overlay, color));
     }
 
     @WrapOperation(method = {"renderTrim", "renderGlint"}, at = @At(value = "INVOKE",
             target = "Lnet/minecraft/client/render/entity/model/BipedEntityModel;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;II)V"))
-    private void playersarmor$clipArmorOverlay(BipedEntityModel<T> model, MatrixStack matrices,
+    private void armorskin$clipArmorOverlay(BipedEntityModel<T> model, MatrixStack matrices,
                                              VertexConsumer vertices, int light, int overlay,
                                              Operation<Void> original) {
-        playersarmor$renderClippedArmor(model, matrices, vertices, light, overlay, -1,
+        armorskin$renderClippedArmor(model, matrices, vertices, light, overlay, -1,
                 () -> original.call(model, matrices, vertices, light, overlay));
     }
 
     @Unique
-    private void playersarmor$renderClippedArmor(BipedEntityModel<T> model, MatrixStack matrices,
+    private void armorskin$renderClippedArmor(BipedEntityModel<T> model, MatrixStack matrices,
                                                VertexConsumer vertices, int light, int overlay,
                                                int color, Runnable original) {
-        if (Float.isNaN(playersarmor$bootDilation)) {
+        if (Float.isNaN(armorskin$bootDilation)) {
             original.run();
             return;
         }
@@ -103,11 +103,11 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity>
             }
             original.run();
         }
-        LegSectionRenderer.renderUpper(model, matrices, vertices, light, overlay, color, playersarmor$bootDilation);
+        LegSectionRenderer.renderUpper(model, matrices, vertices, light, overlay, color, armorskin$bootDilation);
     }
 
     @Inject(method = "renderArmor", at = @At("HEAD"), cancellable = true)
-    private void playersarmor$renderArmor(MatrixStack matrices, VertexConsumerProvider vertexConsumers,
+    private void armorskin$renderArmor(MatrixStack matrices, VertexConsumerProvider vertexConsumers,
                                          T entity, EquipmentSlot slot, int light,
                                          BipedEntityModel<T> armorModel, CallbackInfo ci) {
         if (!(entity instanceof PlayerEntity || entity instanceof ArmorStandEntity)) {
@@ -134,8 +134,8 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity>
             }
         }
 
-        playersarmor$renderer.render(matrices, vertexConsumers, light, getContextModel(),
-                appearance, skin, stack.hasGlint(), boots, entity, playersarmor$tickDelta);
+        armorskin$renderer.render(matrices, vertexConsumers, light, getContextModel(),
+                appearance, skin, stack.hasGlint(), boots, entity, armorskin$tickDelta);
         ci.cancel();
     }
 }

@@ -1,8 +1,8 @@
-package dev.playersarmor.mixin;
+package dev.armorskin.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import dev.playersarmor.ArmorAppearance;
-import dev.playersarmor.ArmorNameParser;
+import dev.armorskin.ArmorAppearance;
+import dev.armorskin.ArmorNameParser;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.AnvilScreen;
 import net.minecraft.item.ItemStack;
@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin {
     @ModifyReturnValue(method = "getName", at = @At("RETURN"))
-    private Text playersarmor$hideFlags(Text original) {
+    private Text armorskin$hideFlags(Text original) {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client == null || !client.isOnThread() || client.currentScreen instanceof AnvilScreen) {
             return original;

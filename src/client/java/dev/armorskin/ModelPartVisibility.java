@@ -1,4 +1,4 @@
-package dev.playersarmor;
+package dev.armorskin;
 
 import net.minecraft.client.model.ModelPart;
 

@@ -1,4 +1,4 @@
-package dev.playersarmor.mixin;
+package dev.armorskin.mixin;
 
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.entity.model.ArmorStandEntityModel;
@@ -8,11 +8,11 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 @Mixin(ArmorStandEntityModel.class)
 public interface ArmorStandModelAccessor {
     @Accessor("rightBodyStick")
-    ModelPart playersarmor$getRightBodyStick();
+    ModelPart armorskin$getRightBodyStick();
 
     @Accessor("leftBodyStick")
-    ModelPart playersarmor$getLeftBodyStick();
+    ModelPart armorskin$getLeftBodyStick();
 
     @Accessor("shoulderStick")
-    ModelPart playersarmor$getShoulderStick();
+    ModelPart armorskin$getShoulderStick();
 }

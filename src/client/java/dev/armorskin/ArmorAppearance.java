@@ -1,4 +1,4 @@
-package dev.playersarmor;
+package dev.armorskin;
 
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.EquipmentSlot;

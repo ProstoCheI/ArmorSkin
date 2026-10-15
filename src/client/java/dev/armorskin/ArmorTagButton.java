@@ -1,4 +1,4 @@
-package dev.playersarmor;
+package dev.armorskin;
 
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;

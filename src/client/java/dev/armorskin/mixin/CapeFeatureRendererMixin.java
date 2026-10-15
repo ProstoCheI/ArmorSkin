@@ -1,8 +1,8 @@
-package dev.playersarmor.mixin;
+package dev.armorskin.mixin;
 
-import dev.playersarmor.ArmorAppearance;
-import dev.playersarmor.ArmorNameParser;
-import dev.playersarmor.PlayerSkinCache;
+import dev.armorskin.ArmorAppearance;
+import dev.armorskin.ArmorNameParser;
+import dev.armorskin.PlayerSkinCache;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.CapeFeatureRenderer;
@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class CapeFeatureRendererMixin {
     @Inject(method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/client/network/AbstractClientPlayerEntity;FFFFFF)V",
             at = @At("HEAD"), cancellable = true)
-    private void playersarmor$hideOriginalCape(MatrixStack matrices, VertexConsumerProvider vertices,
+    private void armorskin$hideOriginalCape(MatrixStack matrices, VertexConsumerProvider vertices,
                                               int light, AbstractClientPlayerEntity player, float limbAngle,
                                               float limbDistance, float tickDelta, float animationProgress,
                                               float headYaw, float headPitch, CallbackInfo ci) {

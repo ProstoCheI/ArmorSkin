@@ -1,17 +1,17 @@
 {
   "schemaVersion": 1,
-  "id": "playersarmor",
+  "id": "armorskin",
   "version": "${version}",
-  "name": "Player Armor",
+  "name": "ArmorSkin",
   "description": "Display player skin parts using renamed armor.",
   "environment": "client",
   "entrypoints": {
     "client": [
-      "dev.playersarmor.PlayerArmorClient"
+      "dev.armorskin.ArmorSkinClient"
     ]
   },
   "mixins": [
-    "playersarmor.client.mixins.json"
+    "armorskin.client.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.16.14",

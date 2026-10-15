@@ -1,4 +1,4 @@
-package dev.playersarmor;
+package dev.armorskin;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -77,7 +77,7 @@ public final class PlayerSkinCache {
                         : client.getSkinProvider().fetchSkinTextures(profile), client)
                 .handle((skin, error) -> {
                     if (error != null) {
-                        PlayerArmorClient.LOGGER.warn("Failed to load skin for {}", username, error);
+                        ArmorSkinClient.LOGGER.warn("Failed to load skin for {}", username, error);
                     }
                     return Optional.ofNullable(skin);
                 });

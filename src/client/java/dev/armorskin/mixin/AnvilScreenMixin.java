@@ -1,9 +1,9 @@
-package dev.playersarmor.mixin;
+package dev.armorskin.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import dev.playersarmor.ArmorAppearance;
-import dev.playersarmor.ArmorFlagPanel;
+import dev.armorskin.ArmorAppearance;
+import dev.armorskin.ArmorFlagPanel;
 import net.minecraft.client.gui.screen.ingame.AnvilScreen;
 import net.minecraft.client.gui.screen.ingame.ForgingScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -27,53 +27,53 @@ public abstract class AnvilScreenMixin extends ForgingScreen<AnvilScreenHandler>
     private TextFieldWidget nameField;
 
     @Unique
-    private ArmorFlagPanel playersarmor$flags;
+    private ArmorFlagPanel armorskin$flags;
 
     protected AnvilScreenMixin(AnvilScreenHandler handler, PlayerInventory inventory, Text title, Identifier texture) {
         super(handler, inventory, title, texture);
     }
 
     @Inject(method = "setup", at = @At("TAIL"))
-    private void playersarmor$createFlagPanel(CallbackInfo ci) {
-        boolean open = playersarmor$flags != null && playersarmor$flags.isOpen();
-        playersarmor$flags = new ArmorFlagPanel(textRenderer, nameField,
-                () -> handler.getSlot(0).getStack(), this::playersarmor$positionFlagPanel);
-        addDrawable(playersarmor$flags);
-        playersarmor$flags.buttons().forEach(this::addDrawableChild);
-        playersarmor$flags.setOpen(open);
+    private void armorskin$createFlagPanel(CallbackInfo ci) {
+        boolean open = armorskin$flags != null && armorskin$flags.isOpen();
+        armorskin$flags = new ArmorFlagPanel(textRenderer, nameField,
+                () -> handler.getSlot(0).getStack(), this::armorskin$positionFlagPanel);
+        addDrawable(armorskin$flags);
+        armorskin$flags.buttons().forEach(this::addDrawableChild);
+        armorskin$flags.setOpen(open);
     }
 
     @Unique
-    private void playersarmor$positionFlagPanel() {
-        int extraWidth = playersarmor$flags.isOpen() ? ArmorFlagPanel.WIDTH + ArmorFlagPanel.GAP : 0;
+    private void armorskin$positionFlagPanel() {
+        int extraWidth = armorskin$flags.isOpen() ? ArmorFlagPanel.WIDTH + ArmorFlagPanel.GAP : 0;
         x = (width - backgroundWidth - extraWidth) / 2;
         nameField.setPosition(x + 62, y + 24);
-        playersarmor$flags.setPosition(x, y, backgroundWidth);
+        armorskin$flags.setPosition(x, y, backgroundWidth);
     }
 
     @Inject(method = "onRenamed", at = @At("TAIL"))
-    private void playersarmor$updateFlagSelection(String name, CallbackInfo ci) {
-        if (playersarmor$flags != null) {
-            playersarmor$flags.refresh();
+    private void armorskin$updateFlagSelection(String name, CallbackInfo ci) {
+        if (armorskin$flags != null) {
+            armorskin$flags.refresh();
         }
     }
 
     @Inject(method = "onSlotUpdate", at = @At("TAIL"))
-    private void playersarmor$updateFlagPanel(ScreenHandler handler, int slot, ItemStack stack, CallbackInfo ci) {
-        if (playersarmor$flags != null) {
-            playersarmor$flags.refresh();
+    private void armorskin$updateFlagPanel(ScreenHandler handler, int slot, ItemStack stack, CallbackInfo ci) {
+        if (armorskin$flags != null) {
+            armorskin$flags.refresh();
         }
     }
 
     @Override
     protected boolean isClickOutsideBounds(double mouseX, double mouseY, int left, int top, int button) {
         return super.isClickOutsideBounds(mouseX, mouseY, left, top, button)
-                && (playersarmor$flags == null || !playersarmor$flags.contains(mouseX, mouseY));
+                && (armorskin$flags == null || !armorskin$flags.contains(mouseX, mouseY));
     }
 
     @WrapOperation(method = "onSlotUpdate", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/item/ItemStack;getName()Lnet/minecraft/text/Text;"))
-    private Text playersarmor$keepFlagsInRenameField(ItemStack stack, Operation<Text> original) {
+    private Text armorskin$keepFlagsInRenameField(ItemStack stack, Operation<Text> original) {
         if (ArmorAppearance.fromStack(stack) != null) {
             return stack.get(DataComponentTypes.CUSTOM_NAME);
         }

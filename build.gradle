@@ -13,7 +13,7 @@ loom {
     splitEnvironmentSourceSets()
 
     mods {
-        playersarmor {
+        armorskin {
             sourceSet sourceSets.main
             sourceSet sourceSets.client
         }

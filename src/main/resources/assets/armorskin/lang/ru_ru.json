@@ -1,0 +1,17 @@
+{
+  "armorskin.flags.open": "Теги брони",
+  "armorskin.flags.title": "Теги",
+  "armorskin.flags.r": "-r Замена тела",
+  "armorskin.flags.s": "-s Узкие руки",
+  "armorskin.flags.c": "-c Плащ",
+  "armorskin.flags.e": "-e Элитры",
+  "armorskin.flags.r.tooltip": "Броня размером с тело вместо костюма поверх него.",
+  "armorskin.flags.s.tooltip": "Узкие руки у нагрудника.",
+  "armorskin.flags.c.tooltip": "Плащ игрока из названия брони. Вместе с -e его текстура применяется к элитрам вместо отдельного плаща.",
+  "armorskin.flags.e.tooltip": "Стандартные элитры. Вместе с -c используют текстуру плаща игрока из названия. Не дают возможности летать.",
+  "armorskin.flags.enter_name": "Сначала введите ник игрока",
+  "armorskin.flags.chest_only": "Доступно только для нагрудника",
+  "armorskin.flags.name_limit": "В названии предмета не осталось места",
+  "armorskin.flags.cape_elytra": "-c + -e: элитры с плащом",
+  "armorskin.command.reload": "ArmorSkin: кеш очищен. Перезагрузка скинов: %s."
+}

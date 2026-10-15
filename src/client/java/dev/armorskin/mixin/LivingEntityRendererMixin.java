@@ -1,12 +1,12 @@
-package dev.playersarmor.mixin;
+package dev.armorskin.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import dev.playersarmor.ArmorAppearance;
-import dev.playersarmor.ArmorNameParser;
-import dev.playersarmor.ModelPartVisibility;
-import dev.playersarmor.PlayerSkinCache;
-import dev.playersarmor.LegSectionRenderer;
+import dev.armorskin.ArmorAppearance;
+import dev.armorskin.ArmorNameParser;
+import dev.armorskin.ModelPartVisibility;
+import dev.armorskin.PlayerSkinCache;
+import dev.armorskin.LegSectionRenderer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
@@ -27,7 +27,7 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class LivingEntityRendererMixin<T extends LivingEntity> {
     @WrapOperation(method = "render(Lnet/minecraft/entity/LivingEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/model/EntityModel;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;III)V"))
-    private void playersarmor$hideOriginalParts(EntityModel<T> model, MatrixStack matrices,
+    private void armorskin$hideOriginalParts(EntityModel<T> model, MatrixStack matrices,
                                               VertexConsumer vertices, int light, int overlay, int color,
                                               Operation<Void> original, T entity, float yaw, float tickDelta,
                                               MatrixStack entityMatrices, VertexConsumerProvider vertexConsumers,
@@ -38,10 +38,10 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity> {
             return;
         }
 
-        boolean hideHead = playersarmor$hasSkin(entity, EquipmentSlot.HEAD);
-        boolean hideChest = playersarmor$hasSkin(entity, EquipmentSlot.CHEST);
-        boolean hideLegs = playersarmor$hasSkin(entity, EquipmentSlot.LEGS);
-        ArmorAppearance boots = playersarmor$getAppearance(entity, EquipmentSlot.FEET);
+        boolean hideHead = armorskin$hasSkin(entity, EquipmentSlot.HEAD);
+        boolean hideChest = armorskin$hasSkin(entity, EquipmentSlot.CHEST);
+        boolean hideLegs = armorskin$hasSkin(entity, EquipmentSlot.LEGS);
+        ArmorAppearance boots = armorskin$getAppearance(entity, EquipmentSlot.FEET);
         if (!hideHead && !hideChest && !hideLegs && boots == null) {
             original.call(model, matrices, vertices, light, overlay, color);
             return;
@@ -57,8 +57,8 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity> {
                     visibility.hide(player.jacket, player.leftSleeve, player.rightSleeve);
                 }
                 if (biped instanceof ArmorStandModelAccessor stand) {
-                    visibility.hide(stand.playersarmor$getRightBodyStick(), stand.playersarmor$getLeftBodyStick(),
-                            stand.playersarmor$getShoulderStick());
+                    visibility.hide(stand.armorskin$getRightBodyStick(), stand.armorskin$getLeftBodyStick(),
+                            stand.armorskin$getShoulderStick());
                 }
             }
             if (hideLegs || boots != null) {
@@ -78,13 +78,13 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity> {
     }
 
     @Unique
-    private static boolean playersarmor$hasSkin(LivingEntity entity, EquipmentSlot slot) {
-        return playersarmor$getAppearance(entity, slot) != null;
+    private static boolean armorskin$hasSkin(LivingEntity entity, EquipmentSlot slot) {
+        return armorskin$getAppearance(entity, slot) != null;
     }
 
     @Unique
     @Nullable
-    private static ArmorAppearance playersarmor$getAppearance(LivingEntity entity, EquipmentSlot slot) {
+    private static ArmorAppearance armorskin$getAppearance(LivingEntity entity, EquipmentSlot slot) {
         ArmorAppearance appearance = ArmorAppearance.fromStack(entity.getEquippedStack(slot));
         return appearance != null && appearance.slot() == slot
                 && PlayerSkinCache.getSkin(appearance.username()) != null ? appearance : null;

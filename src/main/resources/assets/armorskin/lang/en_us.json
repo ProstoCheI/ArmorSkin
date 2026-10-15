@@ -1,0 +1,17 @@
+{
+  "armorskin.flags.open": "Armor tags",
+  "armorskin.flags.title": "Tags",
+  "armorskin.flags.r": "-r Replace body",
+  "armorskin.flags.s": "-s Slim arms",
+  "armorskin.flags.c": "-c Cape",
+  "armorskin.flags.e": "-e Elytra",
+  "armorskin.flags.r.tooltip": "Use body-sized armor instead of a costume.",
+  "armorskin.flags.s.tooltip": "Use slim arms on the chestplate.",
+  "armorskin.flags.c.tooltip": "Show the named player's cape. With -e, apply its texture to the elytra instead.",
+  "armorskin.flags.e.tooltip": "Show standard elytra. With -c, use the named player's cape texture. Does not enable flight.",
+  "armorskin.flags.enter_name": "Enter a player name first",
+  "armorskin.flags.chest_only": "Only available for chestplates",
+  "armorskin.flags.name_limit": "Not enough room in the item name",
+  "armorskin.flags.cape_elytra": "-c + -e: textured elytra",
+  "armorskin.command.reload": "ArmorSkin: cache cleared. Reloading skins: %s."
+}

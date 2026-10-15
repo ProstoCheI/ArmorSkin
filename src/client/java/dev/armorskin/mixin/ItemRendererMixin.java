@@ -1,8 +1,8 @@
-package dev.playersarmor.mixin;
+package dev.armorskin.mixin;
 
-import dev.playersarmor.ArmorAppearance;
-import dev.playersarmor.PlayerSkinCache;
-import dev.playersarmor.SkinArmorItemRenderer;
+import dev.armorskin.ArmorAppearance;
+import dev.armorskin.PlayerSkinCache;
+import dev.armorskin.SkinArmorItemRenderer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.item.ItemModels;
 import net.minecraft.client.render.item.ItemRenderer;
@@ -27,11 +27,11 @@ public abstract class ItemRendererMixin {
     private ItemModels models;
 
     @Unique
-    private final SkinArmorItemRenderer playersarmor$itemRenderer = new SkinArmorItemRenderer();
+    private final SkinArmorItemRenderer armorskin$itemRenderer = new SkinArmorItemRenderer();
 
     @Inject(method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/render/model/json/ModelTransformationMode;ZLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IILnet/minecraft/client/render/model/BakedModel;)V",
             at = @At("HEAD"), cancellable = true)
-    private void playersarmor$renderArmorItem(ItemStack stack, ModelTransformationMode mode,
+    private void armorskin$renderArmorItem(ItemStack stack, ModelTransformationMode mode,
                                              boolean leftHanded, MatrixStack matrices,
                                              VertexConsumerProvider vertexConsumers,
                                              int light, int overlay, BakedModel model, CallbackInfo ci) {
@@ -49,7 +49,7 @@ public abstract class ItemRendererMixin {
         try {
             models.getModel(Items.PLAYER_HEAD).getTransformation().getTransformation(mode)
                     .apply(leftHanded, matrices);
-            playersarmor$itemRenderer.render(matrices, vertexConsumers, light, overlay,
+            armorskin$itemRenderer.render(matrices, vertexConsumers, light, overlay,
                     appearance, skin, stack.hasGlint());
         } finally {
             matrices.pop();
